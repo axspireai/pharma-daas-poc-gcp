@@ -1,11 +1,11 @@
-name: Deploy to Cloud Run (multi-branch)
+name: Deploy approvals-subscriber to Cloud Run
 
 on:
   push:
     branches: [develop, test, prod]   # only run on these branches
 
 jobs:
-  deploy:
+  deploy-approvals-subscriber:
     runs-on: ubuntu-latest
 
     steps:
@@ -20,14 +20,14 @@ jobs:
       - name: Configure Docker for Artifact Registry
         run: gcloud auth configure-docker us-central1-docker.pkg.dev --quiet
 
-      - name: Build and Push Docker image
+      - name: Build and Push approvals-subscriber image
         run: |
           IMAGE="us-central1-docker.pkg.dev/pharma-daas-poc/daas-repo/approvals-subscriber:${{ github.ref_name }}-${{ github.sha }}"
-          docker build -t $IMAGE ./approvals-subscriber   # 👈 build from service folder
+          docker build -t $IMAGE ./approvals-subscriber
           docker push $IMAGE
           echo "IMAGE=$IMAGE" >> $GITHUB_ENV
 
-      - name: Deploy to Cloud Run
+      - name: Deploy approvals-subscriber
         uses: google-github-actions/deploy-cloudrun@v2
         with:
           service: approvals-subscriber-${{ github.ref_name }}
