@@ -23,7 +23,7 @@ jobs:
       - name: Build and Push Docker image
         run: |
           IMAGE="us-central1-docker.pkg.dev/pharma-daas-poc/daas-repo/approvals-subscriber:${{ github.ref_name }}-${{ github.sha }}"
-          docker build -t $IMAGE .
+          docker build -t $IMAGE ./approvals-subscriber   # 👈 build from service folder
           docker push $IMAGE
           echo "IMAGE=$IMAGE" >> $GITHUB_ENV
 
